@@ -1,0 +1,12 @@
+{
+  "entrypoint": "index.html",
+  "shell": "src/glosor-app.html",
+  "sources": [
+    "src/**/*",
+    "bower.json",
+    "bower_components/firebase/*.js"
+  ],
+  "includeDependencies": [
+    "bower_components/webcomponentsjs/webcomponents-lite.min.js"
+  ]
+}

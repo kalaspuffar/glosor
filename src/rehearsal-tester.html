@@ -1,7 +1,7 @@
-<link rel="import" href="../../bower_components/polymer/polymer.html">
-<link rel="import" href="../../bower_components/paper-button/paper-button.html">
-<link rel="import" href="../../bower_components/paper-input/paper-input.html">
-<link rel="import" href="../../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/polymer/polymer.html">
+<link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/polymerfire/firebase-document.html">
 
 <dom-module id="rehearsal-tester">
   <template>
@@ -30,10 +30,22 @@
       	background: white;
       }
       
+      @media screen and (max-width: 600px) {
+      	.center-list {
+      		width: 100%;
+      	}
+      }
+      
       .main-content div {
       	width: 400px;
       }
       
+      @media screen and (max-width: 400px) {
+      	.main-content div {
+      		margin: 10px;
+      		width: auto;
+      	}
+      }      
       .main-content {
       	display: flex;
       	flex-direction: column;
