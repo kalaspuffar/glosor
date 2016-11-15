@@ -1,0 +1,7 @@
+{
+  "name": "glosor",
+  "short_name": "glosor",
+  "description": "Glosor",
+  "start_url": "/",
+  "display": "standalone"
+}

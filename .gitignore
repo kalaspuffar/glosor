@@ -3,6 +3,12 @@ logs
 *.log
 npm-debug.log*
 
+src/app-starter.html
+database.rules.json
+bower_components
+build
+.firebaserc
+
 # Runtime data
 pids
 *.pid

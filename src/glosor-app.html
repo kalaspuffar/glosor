@@ -1,0 +1,107 @@
+<link rel="import" href="../../bower_components/polymer/polymer.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-app.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-auth.html">
+<link rel="import" href="../../bower_components/polymerfire/firebase-query.html">
+<link rel="import" href="../../bower_components/paper-button/paper-button.html">
+
+<link rel="import" href="top-toolbar.html">
+<link rel="import" href="admin-edit.html">
+<link rel="import" href="rehearsal-tester.html">
+<link rel="import" href="app-starter.html">
+
+<dom-module id="glosor-app">
+  <template>
+    <style>
+      :host {
+        display: block;
+        height: 100%;
+      }
+    </style>
+		<app-starter></app-starter>
+		<firebase-auth 
+
+			id="auth" 
+			user="{{user}}" 
+			signed-in="{{signedIn}}" 
+			provider="google" 
+			on-error="_handleError">
+		</firebase-auth>	
+	
+	  <firebase-query
+	    id="query"
+	    path="/glosor"
+	    data="{{glosorData}}">
+		</firebase-query>
+	
+    <top-toolbar user="[[user]]" signed-in="[[signedIn]]"></top-toolbar>
+    <admin-edit id="adminEditApp" glosor-data="[[glosorData]]" style="display:none"></admin-edit>
+    <rehearsal-tester id="rehearsalTesterApp" glosor-len="[[glosorData.length]]" style="display:none"></rehearsal-tester>	
+</template>
+
+  <script>
+    Polymer({
+
+      is: 'glosor-app',
+
+      properties: {
+      	noteData: {
+          type: Object,
+          notify: true      		
+      	},
+        user: {
+          type: Object,
+          notify: true
+        },
+        signedIn: {
+        	type: Boolean,
+        	notify: true
+        },
+        glosorData: {
+          type: Object,
+          notify: true        	
+        }
+      },
+      
+      listeners: {
+      	'login': '_login',
+      	'logout': '_logout',
+      	'admin-active-changed': '_adminActiveChanged'
+      },
+      
+      observers: [
+      	'_signedInChanged(signedIn)'      
+      ],
+
+			_signedInChanged: function(signedIn) {
+				this.$.adminEditApp.style.display = 'none';
+				this.$.rehearsalTesterApp.style.display = 'none';
+				if(signedIn) {
+					this.$.rehearsalTesterApp.style.display = '';					
+				}
+			},
+
+			_adminActiveChanged: function(e) {
+				if(e.detail.active) {
+					this.$.adminEditApp.style.display = '';					
+				this.$.rehearsalTesterApp.style.display = 'none';
+				} else {
+					this.$.adminEditApp.style.display = 'none';
+					this.$.rehearsalTesterApp.style.display = '';
+				}
+			},
+
+			_handleError: function(e) {
+				console.log(e);
+			},
+
+			_login: function() {
+				this.$.auth.signInWithPopup();
+			},
+
+			_logout: function() {
+				this.$.auth.signOut();				
+			}
+
+    });
+  </script>
+</dom-module>
