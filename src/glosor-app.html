@@ -18,25 +18,25 @@
       }
     </style>
 		<app-starter></app-starter>
-		<firebase-auth 
+		<firebase-auth
 
-			id="auth" 
-			user="{{user}}" 
-			signed-in="{{signedIn}}" 
-			provider="google" 
+			id="auth"
+			user="{{user}}"
+			signed-in="{{signedIn}}"
+			provider="google"
 			on-error="_handleError">
-		</firebase-auth>	
-	
+		</firebase-auth>
+
 	  <firebase-query
 	    id="query"
 	    path="/glosor"
 	    data="{{glosorData}}">
 		</firebase-query>
-	
+
     <top-toolbar user="[[user]]" signed-in="[[signedIn]]"></top-toolbar>
-    <admin-edit id="adminEditApp" glosor-data="[[glosorData]]" style="display:none"></admin-edit>
-    <rehearsal-tester id="rehearsalTesterApp" glosor-len="[[glosorData.length]]" style="display:none"></rehearsal-tester>	
-</template>
+    <admin-edit id="adminEditApp" glosor-data="[[glosorData]]" glosor-len="[[glosorData.length]]" style="display:none"></admin-edit>
+    <rehearsal-tester id="rehearsalTesterApp" glosor-len="[[glosorData.length]]" style="display:none"></rehearsal-tester>
+  </template>
 
   <script>
     Polymer({
@@ -46,7 +46,7 @@
       properties: {
       	noteData: {
           type: Object,
-          notify: true      		
+          notify: true
       	},
         user: {
           type: Object,
@@ -58,31 +58,31 @@
         },
         glosorData: {
           type: Object,
-          notify: true        	
+          notify: true
         }
       },
-      
+
       listeners: {
       	'login': '_login',
       	'logout': '_logout',
       	'admin-active-changed': '_adminActiveChanged'
       },
-      
+
       observers: [
-      	'_signedInChanged(signedIn)'      
+      	'_signedInChanged(signedIn)'
       ],
 
 			_signedInChanged: function(signedIn) {
 				this.$.adminEditApp.style.display = 'none';
 				this.$.rehearsalTesterApp.style.display = 'none';
 				if(signedIn) {
-					this.$.rehearsalTesterApp.style.display = '';					
+					this.$.rehearsalTesterApp.style.display = '';
 				}
 			},
 
 			_adminActiveChanged: function(e) {
 				if(e.detail.active) {
-					this.$.adminEditApp.style.display = '';					
+					this.$.adminEditApp.style.display = '';
 				this.$.rehearsalTesterApp.style.display = 'none';
 				} else {
 					this.$.adminEditApp.style.display = 'none';
@@ -99,7 +99,7 @@
 			},
 
 			_logout: function() {
-				this.$.auth.signOut();				
+				this.$.auth.signOut();
 			}
 
     });

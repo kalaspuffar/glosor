@@ -1,5 +1,9 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-input/paper-input.html">
+<link rel="import" href="../bower_components/paper-dialog/paper-dialog.html">
+<link rel="import" href="../bower_components/iron-icon/iron-icon.html">
+<link rel="import" href="../bower_components/iron-icons/iron-icons.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-query.html">
 
 <dom-module id="admin-edit">
@@ -10,15 +14,15 @@
         min-height: 100%;
         background: #ddd;
       }
-      
+
       .flex-row {
 				display: flex;
 		    flex-direction: row;
 		    justify-content: center;
 		    width: 100%;
-		    align-items: center;	    
+		    align-items: center;
       }
-      
+
       .header,.row {
 				display: flex;
 		    flex-direction: row;
@@ -27,56 +31,129 @@
 		    height: 30px;
 		    padding: 16px;
 		    margin: 5px;
- 		    box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.50);   	
+ 		    box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.50);
       	background: white;
       }
-      
+
       .header {
       	background: olive;
       	color: white;
       }
-            
+
+      .header paper-input {
+        --paper-input-container-label: {
+          color: white;
+        };
+        --paper-input-container-focus-color: {
+          color: white;
+        };
+        --paper-input-container-label-focus: {
+          color: white;
+        };
+        --paper-input-container-label-floating: {
+          color: white;
+        };
+        --paper-input-container-input-color {
+          color: white;
+        };
+        --paper-input-container-input: {
+          color: white;
+        };
+        --paper-input-container-underline: {
+          background-color: white;
+        };
+      }
+
       .odd {
       	background: #efefef;
       }
-      
+
       .latin {
-      	flex: 6;
+      	flex: 5;
+        padding: 0 15px;
       }
-      
+
       .swedish {
-      	flex: 6;
+      	flex: 5;
+        padding: 0 15px;
       }
-      
+
+      .buttons {
+        flex: 1;
+        padding: 0 15px;
+      }
+
       .center-list {
       	margin: 30px 0;
       	width: 70vw;
 		    height: 100%;
       }
-      
+
       @media screen and (max-width: 600px) {
       	.center-list {
       		width: 100%;
       	}
       }
-            
+
     </style>
-		    
+
+    <firebase-document id="newGlosa" data='{{newGlosa}}'>
+    </firebase-document>
+
+    <firebase-document id="editGlosa" path="[[glosaPath]]" data="{{editData}}">
+    </firebase-document>
+
     <div class="flex-row">
     	<div class="center-list">
 				<div class="header">
-					<div class="col latin">Latin</div>
-					<div class="col swedish">Svenska</div>
+					<div class="col latin">
+            <paper-input value="{{newGlosa.Latin}}" label="Latin"></paper-input>
+          </div>
+					<div class="col swedish">
+            <paper-input value="{{newGlosa.Svenska}}" label="Svenska"></paper-input>
+          </div>
+          <div class="col buttons">
+            <paper-button on-click="_addItem">Lägg till</paper-button>
+          </div>
 				</div>
 				<template is="dom-repeat" items="{{glosorData}}" as="glosa">
-					<div class$="row [[_evenClass(index)]]">
+					<div class$="row [[_evenClass(index)]]" data-id="{{_getGlosa(glosa)}}" on-tap="_openEditDialog">
 						<div class="col latin">{{glosa.Latin}}</div>
-						<div class="col swedish">{{glosa.Svenska}}</div>						
+						<div class="col swedish">{{glosa.Svenska}}</div>
+            <div class="col buttons">
+              <paper-button data-id="{{_getGlosa(glosa)}}" on-tap="_deleteItem">
+                <iron-icon icon="delete"></iron-icon>
+              </paper-button>
+            </div>
 					</div>
-				</template>		
+				</template>
     	</div>
     </div>
-    
+
+    <paper-dialog id="editGlosaDialog" class="standard-dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" modal always-on-top>
+      <div class="standard-dialog-child">
+        <div class="dialog-header">
+          <h2>Ändra glosa</h2>
+        </div>
+
+        <div class="content-body">
+          <div class="col latin">
+            <paper-input value="{{editData.Latin}}" label="Latin"></paper-input>
+          </div>
+          <div class="col swedish">
+            <paper-input value="{{editData.Svenska}}" label="Svenska"></paper-input>
+          </div>
+        </div>
+
+        <div class="buttons">
+          <paper-button dialog-confirm autofocus on-tap="_closeCancelDialog">
+            <span class="menu-icon-text">St&auml;ng</span>
+          </paper-button>
+        </div>
+      </div>
+    </paper-dialog>
+
+
   </template>
 
   <script>
@@ -88,13 +165,48 @@
       	glosorData: {
       		type: Object,
       		notify: true
-      	}
+      	},
+        glosorLen: {
+          type: Number,
+          notify: true
+        },
+        glosaPath: {
+          type: String,
+          notify: true
+        }
       },
-      
+
       _evenClass: function(index) {
       	return index % 2 == 1 ? 'odd' : '';
+      },
+
+      _addItem: function () {
+        if (this.$.newGlosa.isNew) {
+          this.$.newGlosa.save('/glosor').then(function() {
+            this.$.newGlosa.reset();
+          }.bind(this));
+        }
+      },
+
+      _openEditDialog: function(e) {
+        if(e.currentTarget.dataId) {
+          this.glosaPath = '/glosor/' + e.currentTarget.dataId;
+          this.$.editGlosaDialog.open();
+        }
+      },
+
+      _getGlosa: function(glosa) {
+        return glosa.$key;
+      },
+
+      _deleteItem: function(e) {
+        e.stopPropagation();
+        if(e.currentTarget.dataId) {
+          this.glosaPath = '/glosor/' + e.currentTarget.dataId;
+          this.editData = null;
+        }
       }
-      
+
     });
   </script>
 </dom-module>
