@@ -8,6 +8,7 @@
 <link rel="import" href="../bower_components/neon-animation/neon-animatable.html">
 <link rel="import" href="../bower_components/neon-animation/animations/scale-up-animation.html">
 <link rel="import" href="../bower_components/neon-animation/animations/fade-out-animation.html">
+<link rel="import" href="../bower_components/iron-a11y-keys/iron-a11y-keys.html">
 
 <dom-module id="admin-edit">
   <template>
@@ -148,6 +149,8 @@
     	</div>
     </div>
 
+    <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="_closeEditDialog"></iron-a11y-keys>
+
     <paper-dialog id="editGlosaDialog" class="standard-dialog" entry-animation="scale-up-animation" exit-animation="fade-out-animation" modal always-on-top>
       <div class="standard-dialog-child">
         <div class="dialog-header">
@@ -204,6 +207,10 @@
             this.$.newGlosa.reset();
           }.bind(this));
         }
+      },
+
+      _closeEditDialog: function() {
+        this.$.editGlosaDialog.close();
       },
 
       _openEditDialog: function(e) {

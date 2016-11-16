@@ -2,6 +2,9 @@
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
 <link rel="import" href="../bower_components/paper-input/paper-input.html">
 <link rel="import" href="../bower_components/polymerfire/firebase-document.html">
+<link rel="import" href="../bower_components/iron-a11y-keys/iron-a11y-keys.html">
+
+
 
 <dom-module id="rehearsal-tester">
   <template>
@@ -9,43 +12,43 @@
       :host {
         display: block;
         height: 93%;
-        background: #ddd;        
+        background: #ddd;
       }
-      
+
       .flex-row {
 				display: flex;
 		    flex-direction: row;
 		    justify-content: center;
-		    align-items: center;	    
+		    align-items: center;
 		    width: 100%;
 		    height: 100%;
       }
-     
+
       .center-list {
       	width: 600px;
 		    height: 400px;
  		    box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.50);
  		    margin-top: -60px;
- 		    padding: 30px;	
+ 		    padding: 30px;
       	background: white;
       }
-      
+
       @media screen and (max-width: 600px) {
       	.center-list {
       		width: 100%;
       	}
       }
-      
+
       .main-content div {
       	width: 400px;
       }
-      
+
       @media screen and (max-width: 400px) {
       	.main-content div {
       		margin: 10px;
       		width: auto;
       	}
-      }      
+      }
       .main-content {
       	display: flex;
       	flex-direction: column;
@@ -61,42 +64,44 @@
 		    align-items: center;
 		    justify-content: center;
       }
-      
+
       .buttons {
       	display: flex;
       	flex-direction: row;
       	height: 40px;
       	width: 100%;
-      	justify-content: flex-end;      	
+      	justify-content: flex-end;
       }
     </style>
-       
+
 		<firebase-document
 		    id="document"
 		    path="/glosor/[[currentIndex]]"
 		    data="{{glosaData}}">
-		</firebase-document>    
-    
+		</firebase-document>
+
+    <iron-a11y-keys id="a11y" target="[[target]]" keys="enter" on-keys-pressed="_validateAnswer"></iron-a11y-keys>
+
     <div class="flex-row">
     	<div class="center-list">
     		<div class="main-content">
 					<div class="glosa" id="glosa">[[glosaData.Svenska]]</div>
 					<div class="test">
-						<paper-input id="testAnswer" on-keydown="_resetAnswer" label="Svaret"></paper-input>    									
+						<paper-input id="testAnswer" autofocus on-keydown="_resetAnswer" label="Svaret"></paper-input>
 					</div>
 					<div class="answer" id="answer" style="display:none">
 						[[glosaData.Latin]]
 					</div>
-    		</div>													
-							
+    		</div>
+
 				<div class="buttons">
-					<paper-button on-tap="_validateAnswer">R&auml;tta</paper-button>					
-					<paper-button on-tap="_showAnswer">Visa</paper-button>					
-					<paper-button on-tap="_gotoNext">N&auml;sta</paper-button>					
-				</div>	
+					<paper-button on-tap="_validateAnswer">R&auml;tta</paper-button>
+					<paper-button on-tap="_showAnswer">Visa</paper-button>
+					<paper-button on-tap="_gotoNext">N&auml;sta</paper-button>
+				</div>
     	</div>
     </div>
-    
+
   </template>
 
   <script>
@@ -107,45 +112,45 @@
       properties: {
       	glosaData: {
       		type: Object,
-      		notify: true      		
+      		notify: true
       	},
       	glosorLen: {
       		type: Number,
-      		notify: true      		
+      		notify: true
       	},
       	currentIndex: {
       		type: Number,
       		notify: true
       	}
       },
-      
+
       _validateAnswer: function() {
       	if(this.$.testAnswer.value && this.$.testAnswer.value.toLowerCase() == this.glosaData.Latin.toLowerCase()) {
       		this.$.glosa.style.color = 'lightgreen';
       	} else {
-      		this.$.glosa.style.color = 'red';      		
+      		this.$.glosa.style.color = 'red';
       	}
       },
-      
+
       _resetAnswer: function() {
       	this.$.glosa.style.color = 'black';
       },
-      
+
       _showAnswer: function() {
-      	this.$.answer.style.display = '';      	
+      	this.$.answer.style.display = '';
       },
-      
-      _gotoNext: function() {      	
+
+      _gotoNext: function() {
       	this.currentIndex = Math.round(this.glosorLen * Math.random());
       	this.$.answer.style.display = 'none';
       	this.$.glosa.style.color = 'black';
       },
-      
+
       ready: function() {
       	setTimeout(function() {
-      		this._gotoNext();  		
+      		this._gotoNext();
       	}.bind(this),1000);
-      }                  
+      }
     });
   </script>
 </dom-module>

@@ -8,7 +8,8 @@
     "paper-input": "^1.1.21",
     "paper-dialog": "^1.1.0",
     "neon-animation": "^1.2.4",
-    "paper-toggle-button": "^1.2.1"
+    "paper-toggle-button": "^1.2.1",
+    "iron-a11y-keys": "^1.0.6"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",
