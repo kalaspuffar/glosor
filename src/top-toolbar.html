@@ -43,7 +43,7 @@
     </style>
 
     <div class="flex-row flex-end">
-	    <paper-toggle-button raised toggles active="{{adminActive}}">Admin</paper-toggle-button>
+	    <paper-toggle-button raised toggles active="{{adminActive}}" hidden="[[!signedIn]]">Admin</paper-toggle-button>
     	<div class="name">
 				[[user.displayName]]
     	</div>

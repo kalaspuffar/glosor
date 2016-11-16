@@ -81,6 +81,7 @@
 			},
 
 			_adminActiveChanged: function(e) {
+        if(!this.signedIn) return;
 				if(e.detail.active) {
 					this.$.adminEditApp.style.display = '';
 				this.$.rehearsalTesterApp.style.display = 'none';
