@@ -7,7 +7,8 @@
     "polymerfire": "firebase/polymerfire#^0.10.3",
     "paper-input": "^1.1.21",
     "paper-dialog": "^1.1.0",
-    "neon-animation": "^1.2.4"
+    "neon-animation": "^1.2.4",
+    "paper-toggle-button": "^1.2.1"
   },
   "devDependencies": {
     "iron-component-page": "PolymerElements/iron-component-page#^1.0.0",

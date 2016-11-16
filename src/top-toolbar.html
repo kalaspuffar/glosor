@@ -1,5 +1,7 @@
 <link rel="import" href="../bower_components/polymer/polymer.html">
 <link rel="import" href="../bower_components/paper-button/paper-button.html">
+<link rel="import" href="../bower_components/paper-toggle-button/paper-toggle-button.html">
+
 
 <dom-module id="top-toolbar">
   <template>
@@ -7,7 +9,7 @@
       :host {
         display: block;
       }
-      
+
       .flex-row {
 				display: flex;
 		    flex-direction: row;
@@ -20,27 +22,35 @@
 		    padding: 0;
 		    height: 60px;
 		    font-weight: 700;
-		    box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.50);    
+		    box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.50);
       }
-      
+
       .name {
       	margin: 0 16px 0 0;
       }
-      
+
+      paper-toggle-button {
+      	margin: 0 30px 0 0;
+        --paper-toggle-button-label-color: {
+          color: white;
+        };
+
+      }
+
       paper-button {
-      	margin: 0 16px 0 0;      	
-      } 
+      	margin: 0 16px 0 0;
+      }
     </style>
-    
+
     <div class="flex-row flex-end">
-	    <paper-button raised toggles active="{{adminActive}}">Admin</paper-button>
+	    <paper-toggle-button raised toggles active="{{adminActive}}">Admin</paper-toggle-button>
     	<div class="name">
-				[[user.displayName]]    		
+				[[user.displayName]]
     	</div>
 	    <paper-button raised hidden="[[signedIn]]" on-tap="_login">Login</paper-button>
 	    <paper-button raised hidden="[[!signedIn]]" on-tap="_logout">Logout</paper-button>
     </div>
-    
+
   </template>
 
   <script>
@@ -60,16 +70,16 @@
         adminActive: {
         	type: Boolean,
         	notify: true,
-        	observer: '_adminActiveChanged'        	
+        	observer: '_adminActiveChanged'
         }
       },
-      
+
       _adminActiveChanged: function(active) {
       	this.fire('admin-active-changed', {'active': active});
       },
-      
+
 			_login: function() {
-				this.fire('login');				
+				this.fire('login');
 			},
 
 			_logout: function() {
