@@ -31,22 +31,10 @@
       	background: white;
       }
 
-      @media screen and (max-width: 600px) {
-      	.center-list {
-      		width: 100vw;
-      	}
-      }
-
       .main-content div {
       	width: 400px;
       }
 
-      @media screen and (max-width: 400px) {
-      	.main-content div {
-      		margin: 10px;
-      		width: auto;
-      	}
-      }
       .main-content {
       	display: flex;
       	flex-direction: column;
@@ -70,6 +58,16 @@
       	width: 100%;
       	justify-content: flex-end;
       }
+
+      @media screen and (max-width: 600px) {
+      	.center-list {
+      		width: 100vw;
+      	}
+        .main-content div {
+      		margin: 10px;
+      		width: auto;
+      	}
+      }      
     </style>
 
 		<firebase-document
