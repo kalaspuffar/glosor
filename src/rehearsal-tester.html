@@ -110,6 +110,10 @@
       		type: Object,
       		notify: true
       	},
+      	glosorKeys: {
+      	  type: Array,
+      	  notify: true
+      	},
       	glosorLen: {
       		type: Number,
       		notify: true
@@ -119,6 +123,17 @@
       		notify: true
       	}
       },
+      
+      observers: [
+        '_glosorDataChanged(glosorData)'
+      ],
+
+      _glosorDataChanged: function(glosorData) {
+      	  this.glosorKeys = [];
+      	  for(var i in glosorData) {
+      	  	  this.glosorKeys.push(glosorData[i].$key);
+      	  }
+      }
 
       _validateAnswer: function() {
       	if(this.$.testAnswer.value && this.$.testAnswer.value.toLowerCase() == this.glosaData.Latin.toLowerCase()) {
@@ -137,7 +152,7 @@
       },
 
       _gotoNext: function() {
-      	this.currentIndex = Math.round(this.glosorLen * Math.random());
+      	this.currentIndex = this.glosorKeys[Math.round(this.glosorKeys.length * Math.random())];
       	this.$.answer.style.display = 'none';
       	this.$.glosa.style.color = 'black';
       },
