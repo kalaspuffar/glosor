@@ -35,7 +35,8 @@
 
     <top-toolbar user="[[user]]" signed-in="[[signedIn]]"></top-toolbar>
     <admin-edit id="adminEditApp" glosor-data="[[glosorData]]" glosor-len="[[glosorData.length]]" style="display:none"></admin-edit>
-    <rehearsal-tester id="rehearsalTesterApp" glosor-len="[[glosorData.length]]" style="display:none"></rehearsal-tester>
+    <rehearsal-tester id="rehearsalTesterApp" glosor-data="[[glosorData]]" style="display:none"></rehearsal-tester>
+   
   </template>
 
   <script>
@@ -44,10 +45,6 @@
       is: 'glosor-app',
 
       properties: {
-      	noteData: {
-          type: Object,
-          notify: true
-      	},
         user: {
           type: Object,
           notify: true
@@ -57,7 +54,7 @@
         	notify: true
         },
         glosorData: {
-          type: Object,
+          type: Array,
           notify: true
         }
       },

@@ -17,6 +17,8 @@
         display: block;
         min-height: 100%;
         background: #ddd;
+        position: relative;
+        z-index: 2;
       }
 
       .flex-row {
@@ -35,7 +37,7 @@
 		    height: 30px;
 		    padding: 16px;
 		    margin: 5px;
- 		    box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.50);
+ 		    box-shadow: 0px 10px 10px -6px rgba(0,0,0,0.5);
       	background: white;
       }
 
@@ -96,6 +98,10 @@
       @media screen and (max-width: 600px) {
       	.center-list {
       		width: 100vw;
+      	}
+      	
+      	.header,.row {
+      		width: auto;
       	}
       }
 

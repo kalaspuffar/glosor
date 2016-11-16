@@ -11,6 +11,8 @@
         display: block;
         height: 93%;
         background: #ddd;
+        position: relative;
+        z-index: 2;
       }
 
       .flex-row {
@@ -25,7 +27,7 @@
       .center-list {
       	width: 600px;
 		    height: 400px;
- 		    box-shadow: 10px 10px 12px -8px rgba(0,0,0,0.50);
+ 		    box-shadow: 0px 10px 10px -6px rgba(0,0,0,0.5);
  		    margin-top: -60px;
  		    padding: 30px;
       	background: white;
@@ -54,7 +56,7 @@
       .buttons {
       	display: flex;
       	flex-direction: row;
-      	height: 40px;
+      	height: 50px;
       	width: 100%;
       	justify-content: flex-end;
       }
@@ -62,6 +64,10 @@
       @media screen and (max-width: 600px) {
       	.center-list {
       		width: 100vw;
+      		height: auto;
+      	}
+      	.main-content {
+      		height: auto;      		
       	}
         .main-content div {
       		margin: 10px;
@@ -98,6 +104,10 @@
     	</div>
     </div>
 
+    <template is="dom-repeat" items="{{glosorData}}" as="glosa">
+    	<div data-test="[[_getKeys(glosa)]]"></div>
+    </template>
+
   </template>
 
   <script>
@@ -110,13 +120,13 @@
       		type: Object,
       		notify: true
       	},
+      	glosorData: {
+      	  type: Array,
+      	  notify: true      		
+      	},
       	glosorKeys: {
       	  type: Array,
       	  notify: true
-      	},
-      	glosorLen: {
-      		type: Number,
-      		notify: true
       	},
       	currentIndex: {
       		type: Number,
@@ -126,16 +136,21 @@
       
       observers: [
         '_glosorDataChanged(glosorData)'
-      ],
+      ],      
+      
+      _getKeys: function(glosa) {
+      	this.glosorKeys.push(glosa.$key);
+    	},
 
       _glosorDataChanged: function(glosorData) {
-      	  this.glosorKeys = [];
-      	  for(var i in glosorData) {
-      	  	  this.glosorKeys.push(glosorData[i].$key);
-      	  }
-      }
+      	this.glosorKeys = [];
+      },      
 
       _validateAnswer: function() {
+      	if(this.$.glosa.style.color == 'lightgreen') {
+      		this._gotoNext();
+      		return;
+      	}
       	if(this.$.testAnswer.value && this.$.testAnswer.value.toLowerCase() == this.glosaData.Latin.toLowerCase()) {
       		this.$.glosa.style.color = 'lightgreen';
       	} else {
@@ -143,8 +158,8 @@
       	}
       },
 
-      _resetAnswer: function() {
-      	this.$.glosa.style.color = 'black';
+      _resetAnswer: function(e) {      	
+      	if(e.keyCode != 13) this.$.glosa.style.color = 'black';
       },
 
       _showAnswer: function() {
@@ -155,13 +170,8 @@
       	this.currentIndex = this.glosorKeys[Math.round(this.glosorKeys.length * Math.random())];
       	this.$.answer.style.display = 'none';
       	this.$.glosa.style.color = 'black';
+      	this.$.testAnswer.value = '';
       },
-
-      ready: function() {
-      	setTimeout(function() {
-      		this._gotoNext();
-      	}.bind(this),1000);
-      }
     });
   </script>
 </dom-module>
